@@ -142,7 +142,7 @@ const Signup = (props) => {
                 }}
               />
             </Box>
-            <IconButton variant="outlined" onClick={signInEmail} style={{marginLeft:'10%', alignContent:'center', alignItems:'center'}}>
+            <IconButton variant="outlined" onClick={signInEmail} style={{marginLeft:'10%', marginTop:'5%', alignContent:'center', alignItems:'center'}}>
               <EmailIcon />
               <div style={{ fontSize: "70%" }}> Login with Email account</div>
             </IconButton>

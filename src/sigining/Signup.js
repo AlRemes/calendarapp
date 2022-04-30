@@ -16,7 +16,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  onAuthStateChanged,
+  GithubAuthProvider,
   signOut
 } from "firebase/auth";
 import { Button } from "@mui/material";
@@ -25,7 +25,7 @@ let user = '';
 
 const Signup = (props) => {
 
-  const navigate = useNavigate()
+const navigate = useNavigate()
 
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
@@ -39,7 +39,19 @@ const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
   .then((re) => {
     user = re.user.email
-    console.log(re)
+    move()
+  })
+  .catch((err) => {
+    console.log(err)
+  })
+}
+
+const signInWithGithub = () =>{
+  const provider = new GithubAuthProvider();
+  signInWithPopup(auth, provider)
+  .then((re) => {
+    user = re.user.email
+    move()
   })
   .catch((err) => {
     console.log(err)
@@ -67,10 +79,15 @@ signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in 
         const user = userCredential.user;
-        console.log(user)
+        if (userCredential){
+        move()
+      } else {
+        alert('Something went wrong. Are your login details correct?')
+      }
         // ...
       })
       .catch((error) => {
+        
         const errorCode = error.code;
         const errorMessage = error.message;
       });
@@ -119,26 +136,21 @@ const handleData = (id) => {
         />
       </Box>
     <Button
+    variant="outlined" onClick={signInEmail} style={{marginTop:10}}>
+        Sign in with Email account
+    </Button>
+    <Button
     variant="outlined" onClick={signInWithGoogle} style={{marginTop:10}}>
         Sign in with Google
+    </Button>
+    <Button
+    variant="outlined" onClick={signInWithGithub} style={{marginTop:10}}>
+        Sign in with Github
     </Button>
     <Button
     variant="outlined" onClick={createEmailAcc} style={{marginTop:10}}>
         Create Email account
     </Button>
-    <Button
-    variant="outlined" onClick={signInEmail} style={{marginTop:10}}>
-        Sign in with Email account
-    </Button>
-    <Button
-    variant="outlined" onClick={signOut} style={{marginTop:10}}>
-        Sign out
-    </Button>
-    <Button
-    variant="outlined" onClick={move} style={{marginTop:10}}>
-        To calendar
-    </Button>
-
     </Box>
     </>
   );

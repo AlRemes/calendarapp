@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from "react";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -12,21 +14,25 @@ import Box from '@mui/material/Box';
 
 import moment from "moment";
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-  >
-    •
-  </Box>
-);
+
 
 function Display(props) {
 
-    console.log(props)
-if(!props.open){
+  const [thisEvent, setThisEvent] = useState()
+
+  useEffect(() => {
+    setThisEvent(props)
+  })
+
+  const deleteThis = () => {
+    props.handleDelete(thisEvent.detail.id)
+  }
+
+
+  if (!props.detail){
     return null
-}
+  }
+
   return (
     <Dialog open={props.open} onClose={props.handleClose}>
       <DialogTitle>Event details</DialogTitle>
@@ -47,7 +53,7 @@ if(!props.open){
       </DialogContent>
       <DialogActions>
         <Button onClick={props.handleClose}>Close Screen</Button>
-        <Button style={{color:'red'}} onClick={props.handleDelete}>Delete event</Button>
+        <Button style={{color:'red'}} onClick={_=>deleteThis()}>Delete event</Button>
       </DialogActions>
     </Dialog>
   );

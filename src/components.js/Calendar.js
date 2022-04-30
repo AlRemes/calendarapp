@@ -5,24 +5,32 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-
-import moment from "moment";
-import { display } from "@mui/system";
 import NewEvent from "./NewEvent.js";
 import Display from "./Display.js";
 
+
+import { auth } from "./Firebase.js";
+import { signOut } from "firebase/auth";
+import {useNavigate} from"react-router-dom";
+
+import { userDetails } from "./../sigining/Signup.js"
+
 function Calendar(props) {
+
+  const navigate = useNavigate()
+
+  
+
+  const backToLogin = () => {
+    signOut(auth).then(() =>{
+      props.logOut()
+      alert('Signed out')
+      navigate('/')
+    }).catch((err) => {
+        alert(err.message)
+    })
+  }
+
   const [event, setEvent] = useState({
     importance: "",
     date: "",
@@ -68,7 +76,10 @@ function Calendar(props) {
     setOpenDisplay(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this event?")){
+    props.deleteEvent(id);
+  }
     setOpenDisplay(false);
   }
 
@@ -126,6 +137,11 @@ function Calendar(props) {
               text: "Add event",
               click: () => setOpen(true),
             },
+            signout:{
+              color:'red',
+              text: 'Sign out',
+              click: () => backToLogin()
+            }
           }}
           eventDisplay="block"
           displayEventTime="true"
@@ -134,7 +150,7 @@ function Calendar(props) {
           contentHeight={500}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridWeek"
-          headerToolbar={{ center: "dayGridMonth,dayGridWeek,dayGridDay add" }}
+          headerToolbar={{ center: "dayGridMonth,dayGridWeek,dayGridDay add signout" }}
           events={eventDetails()}
           eventTimeFormat={time}
           eventClick={

@@ -84,6 +84,7 @@ function Calendar(props) {
   }
 
   const handleSave = () => {
+    if (event.date){
     props.saveEvent(event);
     setOpen(false);
     setEvent({
@@ -92,6 +93,10 @@ function Calendar(props) {
       time: "",
       description: "",
     })
+  } else {
+    alert('Add date first')
+  }
+    
   };
 
   const handleClose = () => {
